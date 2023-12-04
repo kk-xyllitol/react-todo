@@ -5,7 +5,8 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <span>テスト</span>
+      <input type= "text"></input>
+      <button>追加</button>
     </div>
   );
 }
