@@ -9,28 +9,39 @@ type Fruit = {
 
 function App() {
   const [fruits, setFruits] = useState<Fruit[] | null>(null);
+  const [data, setData] = useState('');
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        /* ↓「http://localhost:8000」を消す */
-        const res = await fetch("/api");
-        const json: React.SetStateAction<Fruit[] | null> = await res.json();
-        setFruits(json);
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          console.error(e.message);
-        }
-      }
-    };
+  const sendDataToNode = async () => {
+    console.log("click");
+    try {
+      const response = await fetch('http://localhost:3000/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data }),
+      });
 
-    fetchData();
-  }, []); // 空の依存配列は、useEffectがマウント時に一度だけ実行されることを保証します
+      // レスポンスの処理
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log("sippai");
+    }
+  };
+
+
+// 空の依存配列は、useEffectがマウント時に一度だけ実行されることを保証します
+
+  const val = (e:any) => {
+    setData(e.target.value);
+  };
 
   return (
     <div className="container fruitsList">
-      <h1>Fruits Store</h1>
-
+      <input type="text" value={data} onChange={val}></input>
+      <button onClick={sendDataToNode}>追加</button>
+      <div>{data}</div>
       {fruits?.map((fruit) => (
         <div key={fruit.id}>
           <div className="text">

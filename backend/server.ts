@@ -5,11 +5,18 @@ import express from "express";
 const app: express.Express = express();
 const port = 8000;
 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
 app.get("/", (req: express.Request, res: express.Response) => {
   res.send("Hello, world!");
 });
 
-app.get("/api", (req: express.Request, res: express.Response) => {
+app.post("/api", (req: express.Request, res: express.Response) => {
+  const receivedData = req.body.data;
+  console.log(receivedData);
+  console.log("test");
   res.json([
     {
       id:1,
