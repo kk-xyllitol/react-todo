@@ -1,6 +1,8 @@
 /* server.ts */
 
+import { create } from "domain";
 import express from "express";
+import { get } from "http";
 
 const app: express.Express = express();
 const port = 8000;
@@ -8,6 +10,24 @@ const port = 8000;
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
+const mysql = require('mysql2/promise');
+let client :any;
+
+const createConnection = async() => {
+  try{
+    client = await mysql.createConnection({
+    host: "localhost",
+    port: 8889,
+    user: "root",
+    password: "root",
+    database: "react-todo"
+    });
+  } catch (error:any) {
+    console.log("error" + error);
+  }
+};
+
+console.log(createConnection);
 
 app.get("/", (req: express.Request, res: express.Response) => {
   res.send("Hello, world!");
