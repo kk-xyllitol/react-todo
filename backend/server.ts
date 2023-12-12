@@ -27,39 +27,66 @@ const createConnection = async() => {
   }
 };
 
-console.log(createConnection);
+
+const getUserList = async () => {
+  try {
+    if (!client) {
+      await createConnection();
+    }
+
+    const [rows, fields] = await client.execute("SELECT * FROM todo");
+
+    return rows;
+  } catch (error) {
+    console.error("Error fetching user list:", error);
+    throw error;
+  }
+};
+
+const insertUser = async (userData: any) => {
+  console.log(userData);
+  try {
+    if (!client) {
+      await createConnection();
+    }
+
+    const [result] = await client.query(
+      "INSERT INTO todo (list) VALUES (?)",
+      [userData]  // userData.list を指定する
+    );
+
+    console.log("Inserted user with ID:", result.insertId);  // result.insertId を表示す
+  } catch (error) {
+    console.error("Error inserting user:", error);
+    throw error;
+  }
+};
+
+
 
 app.get("/", (req: express.Request, res: express.Response) => {
   res.send("Hello, world!");
 });
 
-app.post("/api", (req: express.Request, res: express.Response) => {
-  const receivedData = req.body.data;
-  console.log(receivedData);
-  console.log("test");
-  res.json([
-    {
-      id:1,
-      name:"りんご",
-      price:200,
-    },
-    {
-      id:2,
-      name:"バナナ",
-      price:300,
-    },
-    {
-      id:3,
-      name:"みかん",
-      price:"150",
-    },
-    {
-      id:4,
-      name:"メロン",
-      price:"2000",
-    },
-  ]);
+app.post("/api", async(req: express.Request, res: express.Response) => {
+
+  try {
+    const receivedData = req.body.data;
+    if(receivedData != ""){
+      await insertUser(receivedData);
+    }
+    const userList = await getUserList();
+    console.log(userList);
+
+    
+  } catch (error) {
+    console.error("Error processing the request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+  
+
 });
+
 
 app.listen(port, () => {
   console.log(`port ${port} でサーバー起動中`);

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-type Fruit = {
+type Todo = {
   id: number;
-  name: string;
-  price: number;
+  list: string;
 };
 
 function App() {
-  const [fruits, setFruits] = useState<Fruit[] | null>(null);
+  const [todo, setTodos] = useState<Todo[] | null>(null);
   const [data, setData] = useState('');
 
   const sendDataToNode = async () => {
@@ -42,11 +41,10 @@ function App() {
       <input type="text" value={data} onChange={val}></input>
       <button onClick={sendDataToNode}>追加</button>
       <div>{data}</div>
-      {fruits?.map((fruit) => (
-        <div key={fruit.id}>
+      {todo?.map((todo) => (
+        <div key={todo.id}>
           <div className="text">
-            <h2>{fruit.name}</h2>
-            <p>{`￥${fruit.price}`}</p>
+            <h2>{todo.list}</h2>
           </div>
         </div>
       ))}
