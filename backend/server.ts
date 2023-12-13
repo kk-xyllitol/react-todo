@@ -77,7 +77,7 @@ app.post("/api", async(req: express.Request, res: express.Response) => {
     }
     const userList = await getUserList();
     console.log(userList);
-
+    res.json(userList);
     
   } catch (error) {
     console.error("Error processing the request:", error);

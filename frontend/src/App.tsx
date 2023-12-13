@@ -11,7 +11,6 @@ function App() {
   const [data, setData] = useState('');
 
   const sendDataToNode = async () => {
-    console.log("click");
     try {
       const response = await fetch('http://localhost:3000/api', {
         method: 'POST',
@@ -23,7 +22,10 @@ function App() {
 
       // レスポンスの処理
       const result = await response.json();
-      console.log(result);
+      console.log('Response from server:', result);
+
+      // サーバーからのデータを state にセットするなどの処理を行う
+      setTodos(result);
     } catch (error) {
       console.log("sippai");
     }
@@ -41,13 +43,12 @@ function App() {
       <input type="text" value={data} onChange={val}></input>
       <button onClick={sendDataToNode}>追加</button>
       <div>{data}</div>
+      <ul>
       {todo?.map((todo) => (
-        <div key={todo.id}>
-          <div className="text">
-            <h2>{todo.list}</h2>
-          </div>
-        </div>
+        
+        <li key={todo.id}><button>×</button>{todo.list}</li>
       ))}
+      </ul>
     </div>
   );
 }
