@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const mysql = require('mysql2/promise');
 let client :any;
-
+//データベース接続
 const createConnection = async() => {
   try{
     client = await mysql.createConnection({
@@ -42,9 +42,8 @@ const getUserList = async () => {
     throw error;
   }
 };
-
+//データ追加
 const insertUser = async (userData: any) => {
-  console.log(userData);
   try {
     if (!client) {
       await createConnection();
@@ -63,11 +62,19 @@ const insertUser = async (userData: any) => {
 };
 
 
-
-app.get("/", (req: express.Request, res: express.Response) => {
-  res.send("Hello, world!");
+//一覧処理
+app.get("/data", async(req: express.Request, res: express.Response) => {
+  try {
+    const userList = await getUserList();
+    console.log(userList);
+    res.json(userList);
+    
+  } catch (error) {
+    console.error("Error processing the request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-
+//追加処理
 app.post("/api", async(req: express.Request, res: express.Response) => {
 
   try {
@@ -86,7 +93,30 @@ app.post("/api", async(req: express.Request, res: express.Response) => {
   
 
 });
+//データ削除処理
+app.delete('/api/:id', async (req: express.Request, res: express.Response) => {
+  const itemId = req.params.id;
+  try {
+    if (!client) {
+      await createConnection();
+    }
 
+    const [result] = await client.query(
+      'DELETE FROM todo WHERE id = ?',
+      [itemId]
+    );
+    
+
+    if (result.affectedRows === 1) {
+      res.json({ message: 'Item deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Item not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  };
+});
 
 app.listen(port, () => {
   console.log(`port ${port} でサーバー起動中`);
