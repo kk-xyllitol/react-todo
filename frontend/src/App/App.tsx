@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
+import '../css/App.css';
 
 type Todo = {
   id: number;
@@ -67,10 +67,13 @@ function App() {
   };
 
   return (
-    <div className="container fruitsList">
-      <input type="text" value={data} onChange={val}></input>
-      <button onClick={sendDataToNode}>追加</button>
-      <div>{data}</div>
+    <div>
+      <h1>TODOリスト</h1>
+      <div className="content">
+        <input type="text" value={data} onChange={val}></input>
+        <button onClick={sendDataToNode}>追加</button>
+        <div>{data}</div>
+      </div>
       <ul>
       {todo?.map((todo) => (
         
