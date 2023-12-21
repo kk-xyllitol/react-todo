@@ -63,10 +63,9 @@ const insertUser = async (userData: any) => {
 
 
 //一覧処理
-app.get("/data", async(req: express.Request, res: express.Response) => {
+app.get("/", async(req: express.Request, res: express.Response) => {
   try {
     const userList = await getUserList();
-    console.log(userList);
     res.json(userList);
     
   } catch (error) {
@@ -74,16 +73,28 @@ app.get("/data", async(req: express.Request, res: express.Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+//一覧処理
+app.get("/data", async(req: express.Request, res: express.Response) => {
+  try {
+    const userList = await getUserList();
+    res.json(userList);
+    
+  } catch (error) {
+    console.error("Error processing the request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //追加処理
 app.post("/api", async(req: express.Request, res: express.Response) => {
 
   try {
     const receivedData = req.body.data;
-    if(receivedData != ""){
+    if(receivedData != "" && receivedData != null){
       await insertUser(receivedData);
     }
     const userList = await getUserList();
-    console.log(userList);
     res.json(userList);
     
   } catch (error) {
@@ -117,6 +128,7 @@ app.delete('/api/:id', async (req: express.Request, res: express.Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   };
 });
+
 
 app.listen(port, () => {
   console.log(`port ${port} でサーバー起動中`);

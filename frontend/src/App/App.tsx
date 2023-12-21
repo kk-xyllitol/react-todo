@@ -8,9 +8,8 @@ type Todo = {
 
 function App() {
   const [todo, setTodos] = useState<Todo[] | null>(null);
-  //入力値取得
   const [data, setData] = useState('');
-  //データベース追加関数
+
   const sendDataToNode = async () => {
     try {
       const response = await fetch('http://localhost:3000/api', {
@@ -21,17 +20,15 @@ function App() {
         body: JSON.stringify({ data }),
       });
 
-      // レスポンスの処理
       const result = await response.json();
       console.log('Response from server:', result);
 
-      // サーバーからのデータを state にセットするなどの処理を行う
       setTodos(result);
     } catch (error) {
-      console.log("sippai");
+      console.log("Error:", error);
     }
   };
-  //todoリスト一覧表示
+
   const fetchTodos = async () => {
     try {
       const response = await fetch('http://localhost:3000/data');
@@ -42,15 +39,17 @@ function App() {
       console.error('Error fetching todos:', error);
     }
   };
-  //todo削除
+
+  useEffect(() => {
+    // ページがマウントされたときにデータを取得
+    fetchTodos();
+  }, []); 
+
   const deleteTodo = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/${id}`, {
+      await fetch(`http://localhost:3000/api/${id}`, {
         method: 'DELETE',
       });
-
-      const result = await response.json();
-      console.log('Response from server:', result);
 
       // データ削除後、再度データを取得する
       fetchTodos();
@@ -59,10 +58,7 @@ function App() {
     }
   };
 
-
-// 空の依存配列は、useEffectがマウント時に一度だけ実行されることを保証します
-
-  const val = (e:any) => {
+  const val = (e: any) => {
     setData(e.target.value);
   };
 
@@ -75,10 +71,12 @@ function App() {
         <div>{data}</div>
       </div>
       <ul>
-      {todo?.map((todo) => (
-        
-        <li key={todo.id}><button onClick={() => deleteTodo(todo.id)}>×</button>{todo.list}</li>
-      ))}
+        {todo?.map((todo) => (
+          <li key={todo.id}>
+            <button onClick={() => deleteTodo(todo.id)}>×</button>
+            {todo.list}
+          </li>
+        ))}
       </ul>
     </div>
   );
