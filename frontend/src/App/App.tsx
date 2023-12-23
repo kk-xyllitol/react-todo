@@ -9,6 +9,11 @@ type Todo = {
 function App() {
   const [todo, setTodos] = useState<Todo[] | null>(null);
   const [data, setData] = useState('');
+  
+  useEffect(() => {
+    // ページがマウントされたときにデータを取得
+    fetchTodos();
+  }, []); 
 
   const sendDataToNode = async () => {
     try {
@@ -28,7 +33,7 @@ function App() {
       console.log("Error:", error);
     }
   };
-
+//データベース情報表示
   const fetchTodos = async () => {
     try {
       const response = await fetch('http://localhost:3000/data');
@@ -40,19 +45,17 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    // ページがマウントされたときにデータを取得
-    fetchTodos();
-  }, []); 
-
+  //Todoカラム削除
   const deleteTodo = async (id: number) => {
     try {
-      await fetch(`http://localhost:3000/api/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/${id}`, {
         method: 'DELETE',
       });
 
       // データ削除後、再度データを取得する
-      fetchTodos();
+      const data = await response.json();
+      console.log('Fetched todos:', data);
+      setTodos(data);
     } catch (error) {
       console.log('Error:', error);
     }
