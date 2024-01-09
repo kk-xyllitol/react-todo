@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Todo from './App/App';
-import User from './App/UserAdd';
+import User from './App/User';
 
 function Routing() {
   return (

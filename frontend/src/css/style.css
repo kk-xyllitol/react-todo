@@ -5,3 +5,36 @@
 div {
   text-align: center;
 }
+
+
+table{
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  table-layout: fixed;
+  
+}
+thead, tbody{
+  text-align: center;
+}
+tbody{
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+  td,th{
+      border: none;
+    height: 90px;
+    border-bottom: 1px solid black;
+  
+    }
+
+    a{
+      text-decoration:none;
+    }
+
+    /*カラム*/
+.space{
+	text-indent: 30px;
+	width: calc(100%/3);
+}
