@@ -53,7 +53,7 @@ const User = () => {
     }
   };
   
-  //Todoカラム削除
+  //Userカラム削除
   const deleteUser = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:3000/user/delete/${id}`, {

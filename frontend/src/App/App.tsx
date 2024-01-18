@@ -18,7 +18,7 @@ function App() {
   const [user, setUsers] = useState<Users[] | null>(null);
   const [todo, setTodos] = useState<Todo[] | null>(null);
   const [data, setData] = useState('');
-  const [selectUser, setSelectUser] = useState('');
+  const [selectUser, setSelectUser] = useState('0');
   
   useEffect(() => {
     // ページがマウントされたときにデータを取得
@@ -73,19 +73,25 @@ function App() {
 
   //Todoカラム削除
   const deleteTodo = async (id: number) => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/${id}`, {
-        method: 'DELETE',
-      });
-
-      // データ削除後、再度データを取得する
-      const data = await response.json();
-      console.log('Fetched todos:', data);
-      setTodos(data);
-    } catch (error) {
-      console.log('Error:', error);
-    }
-  };
+    if(selectUser != "0"){
+      try {
+        const response = await fetch(`http://localhost:3000/delete/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ selectUser })
+        });
+  
+        // データ削除後、再度データを取得する
+        const data = await response.json();
+        console.log('Fetched todos:', data);
+        setTodos(data);
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    };
+  }
 
   const todoVal = (e: any) => {
     setData(e.target.value);
@@ -104,7 +110,7 @@ function App() {
       <div>誰かのタスク</div>
       <ul>
         {todo?.map((todo) => (
-          todo.user_id === 0 && (
+          todo.user_id === 0 && todo.delete_flag == 0 && (
             <li key={todo.id}>
               <button onClick={() => deleteTodo(todo.id)}>×</button>
               {todo.list}
@@ -124,7 +130,7 @@ function App() {
       {selectUser}
       <ul>
         {todo?.map((todo) => (
-          todo.user_id == selectUser && todo.user_id != 0 && (
+          todo.user_id == selectUser && todo.delete_flag == 0 && todo.user_id != 0 && (
             <li key={todo.id}>
               <button onClick={() => deleteTodo(todo.id)}>×</button>
               {todo.list}

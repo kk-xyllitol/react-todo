@@ -26,7 +26,7 @@ const Route_top = () => {
       <nav id="hed">
         <Link to="/" onClick={() => sendDataToNode(Endpoint)}>TODOリスト</Link>
         <Link to="/user">ユーザー追加</Link>
-        <Link to="/route_2">完了履歴</Link>
+        <Link to="/history">完了履歴</Link>
       </nav>
       <hr />
       <Outlet />

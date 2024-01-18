@@ -10,10 +10,12 @@ const bodyParser = require('body-parser');
 
 //データベース接続
 common.createConnection();
-const tableName = "user";
-const coloumsId = "id";
-const coloumsName = "name";
-const coloumsPost = "post";
+const tableName = "todo";
+const coloumsid = "id";
+const coloumsList = "list";
+const userId = "user_id";
+const deleteFlag = "delete_flag";
+const deleteUser = "delete_user";
 
 router.use(bodyParser.json());
 
@@ -23,21 +25,11 @@ router.get("/data", async(req: express.Request, res: express.Response) => {
   await common.getList(tableName,res);
 });
 
-router.post("/add", async(req: express.Request, res: express.Response) => {
-  const receivedPerson = req.body;
-  console.log(receivedPerson);
-  if(receivedPerson.name != null && receivedPerson.name != "" && receivedPerson.post != null && receivedPerson.post != ""){
-  common.insertSQL(tableName,coloumsName+","+coloumsPost,receivedPerson.name+'"' +","+ '"'+receivedPerson.post);
-  }
-  const userList = await common.getListSQL(tableName);
-  res.json(userList);
-});
-
-
 //データ削除処理
  router.delete('/delete/:id', async (req: express.Request, res: express.Response) => {
   //リクエストID取得
   const itemId = req.params.id;
+  console.log(itemId);
   common.deleteList(tableName,itemId,res);
 });
 

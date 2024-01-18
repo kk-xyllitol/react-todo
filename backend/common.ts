@@ -44,6 +44,28 @@ const getListSQL = async (tableName: string) => {
   }
 }; 
 
+const selectSQL = async (colomn: string,tableName: string ,id: number) => {
+  try {
+    if (!client) {
+      await getClient();
+    }
+
+    let query = `SELECT ${colomn} FROM ${tableName} `;
+
+    if(id !== undefined) {
+      console.log(id);
+      query += ` WHERE id = ${id}`;
+    }
+
+    const [rows, fields] = await client.execute(query);
+
+    return rows;
+  } catch (error) {
+    console.error("Error fetching user list:", error);
+    throw error;
+  }
+}; 
+
 //データ追加
 const insertSQL = async (tableName:string, columns:string ,userData: string) => {
   try {
@@ -52,6 +74,24 @@ const insertSQL = async (tableName:string, columns:string ,userData: string) => 
     } 
 
     const query = `INSERT INTO ${tableName} (${columns}) VALUES ("${userData}")`;
+
+    const [result] = await client.execute(query);
+
+    console.log("Inserted user with ID:", result.insertId);  // result.insertId を表示す
+  } catch (error) {
+    console.error("Error inserting user:", error);
+    throw error;
+  }
+};
+
+//データ更新
+const updataSQL = async (tableName:string, conditions:string ,id: string) => {
+  try {
+    if (!client) {
+      await getClient();
+    } 
+
+    const query = `UPDATE ${tableName} SET ${conditions} WHERE ${id}`;
 
     const [result] = await client.execute(query);
 
@@ -109,7 +149,9 @@ module.exports = {
   getClient,
   getListSQL,
   insertSQL,
+  selectSQL,
   deleteSQL,
+  updataSQL,
   getList,
   deleteList
 };
