@@ -59,7 +59,7 @@ const selectSQL = async (colomn: string,tableName: string ,id: number) => {
 
     const [rows, fields] = await client.execute(query);
 
-    return rows;
+    return rows[0];
   } catch (error) {
     console.error("Error fetching user list:", error);
     throw error;

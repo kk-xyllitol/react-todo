@@ -52,19 +52,19 @@ app.post("/api", async(req: express.Request, res: express.Response) => {
 });
 //データ削除処理
 app.post('/delete/:id', async (req: express.Request, res: express.Response) => {
+  console.log("test");
   //リクエストID取得
   const id = req.params.id;
   const selectUser = req.body.selectUser;
   const userName = await common.selectSQL("name", "user", selectUser);
-  console.log(userName);
-
-  await common.updataSQL(tableName, deleteFlag + " = 1," + deleteUser + " = " + userName, coloumsid + " = " + id);
+  
+  await common.updataSQL(tableName, deleteFlag + " = 1," + deleteUser + " = '" + userName.name + "'", coloumsid + " = " + id);
 });
  
 // ユーザールートを使用
 app.use('/user', userRoutes);
 //完了履歴
-app.use('./history', history);
+app.use('/history', history);
 
 app.listen(port, () => {
   console.log(`port ${port} でサーバー起動中`);

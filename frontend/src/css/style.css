@@ -23,7 +23,7 @@ tbody{
 }
 
   td,th{
-      border: none;
+    border: none;
     height: 90px;
     border-bottom: 1px solid black;
   
@@ -37,4 +37,22 @@ tbody{
 .space{
 	text-indent: 30px;
 	width: calc(100%/3);
+}
+
+#user_radio {
+  display: inline-block;
+  position: absolute;
+  right: 150px;
+  top: 140px;
+}
+
+#blank{
+  margin: 100px;
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+p{
+  color: red;
 }

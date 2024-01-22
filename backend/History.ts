@@ -29,7 +29,6 @@ router.get("/data", async(req: express.Request, res: express.Response) => {
  router.delete('/delete/:id', async (req: express.Request, res: express.Response) => {
   //リクエストID取得
   const itemId = req.params.id;
-  console.log(itemId);
   common.deleteList(tableName,itemId,res);
 });
 

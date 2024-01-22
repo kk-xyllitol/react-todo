@@ -19,6 +19,7 @@ function App() {
   const [todo, setTodos] = useState<Todo[] | null>(null);
   const [data, setData] = useState('');
   const [selectUser, setSelectUser] = useState('0');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   useEffect(() => {
     // ページがマウントされたときにデータを取得
@@ -30,8 +31,19 @@ function App() {
     fetchTodos();
   }, [selectUser]); 
 
+  useEffect(() => {    
+    fetchTodos();
+    // selectUserが変更されたときにここで処理を追加
+    const blankElement = document.getElementById('blank');
+    if (blankElement) {
+      blankElement.innerText = selectUser === '0' ? '' : getSelectedUserName() + "のタスク";
+  
+    }
+  }, [selectUser]);
+
   const sendDataToNode = async () => {
     try {
+      setErrorMessage(null);
       const response = await fetch(`http://localhost:3000/api`, {
         method: 'POST',
         headers: {
@@ -46,6 +58,7 @@ function App() {
       setTodos(result);
     } catch (error) {
       console.log("Error:", error);
+      setErrorMessage("エラーが発生しました。もう一度お試しください。");
     }
   };
 //データベース情報表示
@@ -73,7 +86,7 @@ function App() {
 
   //Todoカラム削除
   const deleteTodo = async (id: number) => {
-    if(selectUser != "0"){
+    if(selectUser !== "0"){
       try {
         const response = await fetch(`http://localhost:3000/delete/${id}`, {
           method: 'POST',
@@ -89,21 +102,32 @@ function App() {
         setTodos(data);
       } catch (error) {
         console.log('Error:', error);
+        setErrorMessage("エラーが発生しました。もう一度お試しください。");
       }
+    } else {
+      // ユーザーを選択していない場合のエラーメッセージ
+      setErrorMessage("ユーザーを選択してください");
     };
   }
+
+  const getSelectedUserName = () => {
+    const selectedUser = user?.find(u => u.id.toString() === selectUser);
+    return selectedUser ? selectedUser.name : '';
+  };
 
   const todoVal = (e: any) => {
     setData(e.target.value);
   };
   const userVal = (e:any) => {
     setSelectUser(e.target.value);
+    setErrorMessage(null);
   };
 
   return (
     <div>
       <h1>TODOリスト</h1>
       <div className="content">
+        <p>{errorMessage}</p>
         <input type="text" value={data} onChange={todoVal}></input>
         <button onClick={() => sendDataToNode()}>追加</button>
       </div>
@@ -119,15 +143,16 @@ function App() {
         ))}
       </ul>
 
-      <div>
-        <div><input type="radio" name="user" value="0" checked={selectUser === "0"} onChange={userVal} />誰か</div>
+      <div id="user_radio">
+        <div>ユーザー一覧</div>
+        <label><input type="radio" name="user" value="0" checked={selectUser === "0"} onChange={userVal} />誰か</label>
         {user?.map((user) => (
         <div key={user.id}>
-          <div><input type="radio" name="user" value={user.id} checked={selectUser === user.name} onChange={userVal}/>{user.name}</div>
+          <label><input type="radio" name="user" value={user.id.toString()} checked={selectUser === user.id.toString()} onChange={userVal} />{user.name}</label>
         </div>
           ))}
       </div>
-      {selectUser}
+      <div id="blank">{getSelectedUserName()}</div>
       <ul>
         {todo?.map((todo) => (
           todo.user_id == selectUser && todo.delete_flag == 0 && todo.user_id != 0 && (

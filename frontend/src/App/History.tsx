@@ -24,7 +24,10 @@ const History = () => {
       const response = await fetch('http://localhost:3000/data');
       const data = await response.json();
       console.log('Fetched todos:', data);
-      setHistory(data);
+      // delete_flag が 1 のものだけをフィルタリング
+      const filteredData = data.filter((item: History) => item.delete_flag === 1);
+      console.log('Fetched todos:', filteredData);
+      setHistory(filteredData);
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
@@ -38,7 +41,7 @@ const History = () => {
       });
 
       // データ削除後、再度データを取得する
-      const data = await response.json();
+      const data = await response.json(); 
       console.log('Fetched todos:', data);
       setHistory(data);
     } catch (error) {
@@ -59,11 +62,11 @@ const History = () => {
         </thead>
         <tbody>
         {history?.map((history) => (
-          <tr key={history.id}>
-            <td><a href='#' onClick={() => deleteTask(history.id)}>❌</a></td>
-            <td>{history.list}</td>
-            <td>{history.delete_user}</td>
-          </tr>
+            <tr key={history.id}>
+              <td><a href='#' onClick={() => deleteTask(history.id)}>❌</a></td>
+              <td>{history.list}</td>
+              <td>{history.delete_user}</td>
+            </tr>
         ))}
         </tbody>
       </table>
