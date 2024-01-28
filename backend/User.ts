@@ -23,6 +23,7 @@ router.get("/data", async(req: express.Request, res: express.Response) => {
   await common.getList(tableName,res);
 });
 
+//ユーザー追加
 router.post("/add", async(req: express.Request, res: express.Response) => {
   const receivedPerson = req.body;
   console.log(receivedPerson);

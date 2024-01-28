@@ -2,6 +2,7 @@ import React , {useState,useEffect}from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../css/style.css';
 
+//TODOテーブル
 type History = {
   id: number;
   list: string;

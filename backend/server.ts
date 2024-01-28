@@ -13,7 +13,7 @@ const port = 8000;
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
-
+//テーブルカラム
 const tableName = "todo";
 const coloumsid = "id";
 const coloumsList = "list";

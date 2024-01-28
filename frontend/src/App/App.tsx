@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../css/App.css';
 
+//TODOリストテーブル
 type Todo = {
   id: number;
   list: string;
   user_id: any;
   delete_flag: number;
 };
-
+//ユーザーテーブル
 type Users = {
   id: number;
   name: string;
@@ -15,10 +16,15 @@ type Users = {
 };
 
 function App() {
+  //ユーザーテーブル
   const [user, setUsers] = useState<Users[] | null>(null);
+  //TODOテーブル
   const [todo, setTodos] = useState<Todo[] | null>(null);
+  //TODO入力値
   const [data, setData] = useState('');
+  //ユーザーID
   const [selectUser, setSelectUser] = useState('0');
+  //エラーメッセージ
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   useEffect(() => {
@@ -40,7 +46,7 @@ function App() {
   
     }
   }, [selectUser]);
-
+  //TODO入力値送信
   const sendDataToNode = async () => {
     try {
       setErrorMessage(null);
@@ -72,7 +78,7 @@ function App() {
       console.error('Error fetching todos:', error);
     }
   };
-
+  //ユーザー情報取得
   const fetchUser = async () => {
     try {
       const response = await fetch('http://localhost:3000/user/data');
@@ -109,7 +115,7 @@ function App() {
       setErrorMessage("ユーザーを選択してください");
     };
   }
-
+  //ユーザー名前取得
   const getSelectedUserName = () => {
     const selectedUser = user?.find(u => u.id.toString() === selectUser);
     return selectedUser ? selectedUser.name : '';

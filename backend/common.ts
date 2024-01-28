@@ -25,8 +25,7 @@ const getClient = async () => {
   return client;
 };
 
-
-
+//テーブルの全情報取得
 const getListSQL = async (tableName: string) => {
   try {
     if (!client) {
@@ -44,6 +43,7 @@ const getListSQL = async (tableName: string) => {
   }
 }; 
 
+//テーブルの一部の情報取得
 const selectSQL = async (colomn: string,tableName: string ,id: number) => {
   try {
     if (!client) {
@@ -118,6 +118,7 @@ const deleteSQL = async (tableName:string, itemId: number) => {
   }
 };
 
+//テーブルリスト取得
 const getList = async (tableName: string, res:express.Response) => {
   try {
     const userList = await getListSQL(tableName);
@@ -127,7 +128,7 @@ const getList = async (tableName: string, res:express.Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-
+//テーブル情報削除後、テーブル情報再取得
 const deleteList = async (tableName: string,deleteId: number, res:express.Response) => {
   try {
     const result = await deleteSQL(tableName,deleteId);
@@ -144,6 +145,7 @@ const deleteList = async (tableName: string,deleteId: number, res:express.Respon
   }
 }
 
+//エクスポート
 module.exports = {
   createConnection,
   getClient,

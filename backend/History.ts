@@ -1,5 +1,4 @@
-/* User.ts */
-import { table } from "console";
+/* History.ts */
 import express from "express";
 
 //SQL共通処理
@@ -8,7 +7,7 @@ const router = express.Router();
 
 const bodyParser = require('body-parser');
 
-//データベース接続
+//データベース接続、カラム情報
 common.createConnection();
 const tableName = "todo";
 const coloumsid = "id";

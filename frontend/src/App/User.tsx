@@ -2,6 +2,7 @@ import React , {useState,useEffect}from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../css/style.css';
 
+//ユーザーテーブル
 type Users = {
   id: number;
   name: string;
@@ -10,8 +11,11 @@ type Users = {
 
 
 const User = () => {
+  //ユーザーテーブル
   const [user, setUsers] = useState<Users[] | null>(null);
+  //ユーザーの名前
   const [name, setName] = useState('');
+  //ユーザーの役職
   const [post, setPost] = useState('');
   
   useEffect(() => {
